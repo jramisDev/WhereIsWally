@@ -41,6 +41,10 @@ int main() {
 
     int level = 1;
     int score = 0;
+    bool gameOver = false;
+
+    int levelTime = 10; // Duración del nivel en segundos
+    float elapsedTime = 0.0f; // Tiempo transcurrido en segundos
 
     // Generar tres figuras aleatorias
     Vector2 circlePos = { GetRandomValue(50, screenWidth - 50), GetRandomValue(50, screenHeight - 50) };
@@ -59,7 +63,7 @@ int main() {
     Vector2 triP3 = { triPos.x, triPos.y - 25 };
     // Cada figura debe tener una posición aleatoria en la pantalla y una forma aleatoria
 
-    while (!WindowShouldClose()) {
+    while (!gameOver && !WindowShouldClose()) {
 
         BeginDrawing();
 
@@ -100,18 +104,34 @@ int main() {
         if (score == 3) {
             level++;
             score = 0;
+            elapsedTime = 0.0f; // Reiniciar el tiempo transcurrido
 
             GenerateRandomShapes(circlePos, circleRadius, circleColor,
                 rectPos, rectWidth, rectHeight, rectColor,
                 triPos, triP1, triP2, triP3, triColor);
 
+            levelTime = 10;
+
         }
 
         // Mostrar el nivel y la puntuación en la pantalla
         DrawText(TextFormat("Nivel: %i", level), 10, 10, 20, BLACK);
+        DrawText(TextFormat("Tiempo: %.0f", levelTime - elapsedTime), 10, 30, 20, BLACK);
+
+        // Actualizar el tiempo transcurrido
+        elapsedTime += GetFrameTime();
+        if (elapsedTime >= levelTime) {
+            gameOver = true; // El tiempo ha terminado
+        }
 
         EndDrawing();
     }
+
+    // Mostrar el mensaje de fin de juego
+    ClearBackground(RAYWHITE);
+    DrawText("Fin del juego", screenWidth / 2 - MeasureText("Fin del juego", 40) / 2, screenHeight / 2 - 40, 40, BLACK);
+    EndDrawing();
+    WaitTime(5);
 
     CloseWindow();
 
