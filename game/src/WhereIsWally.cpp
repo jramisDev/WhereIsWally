@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(disable : 4838)
+#pragma warning(disable : 4244)
+
 
 #include "raylib.h"
 #include "init.h"
@@ -19,8 +22,9 @@ int main() {
     int score = 0;
     bool gameOver = false;
 
-    int levelTime = 10; // Duración del nivel en segundos
+    int levelTime = 20; // Duración del nivel en segundos
     float elapsedTime = 0.0f; // Tiempo transcurrido en segundos
+    float timeAcumulated = 0.0f;
 
     // Generar tres figuras aleatorias
     Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 50) };
@@ -106,6 +110,7 @@ int main() {
 
                 // Si todas las figuras han sido eliminadas, pasar al siguiente nivel
                 if (!gameOver && score == 3) {
+                    timeAcumulated = levelTime - elapsedTime;
                     level++;
                     score = 0;
                     elapsedTime = 0.0f; // Reiniciar el tiempo transcurrido
@@ -114,16 +119,24 @@ int main() {
                         rectPos, rectWidth, rectHeight, rectColor,
                         triPos, triP1, triP2, triP3, triColor);
 
-                    levelTime = 10;
+                    
 
                     if (level < 4) actualScreen = NEXTLEVEL;
                     if (level == 4) actualScreen = WIN;
 
+                    
+
                 }
+
+                
+
+
 
                 // Mostrar el nivel y la puntuación en la pantalla
                 DrawText(TextFormat("Nivel: %i", level), 10, 10, 20, BLACK);
                 DrawText(TextFormat("Tiempo: %.0f", levelTime - elapsedTime), 10, 30, 20, BLACK);
+                DrawText(TextFormat("elapsedTime: %.0f", elapsedTime), 10, 50, 20, BLACK);
+                DrawText(TextFormat("timeAcumulated: %i", timeAcumulated), 10, 70, 20, BLACK);
 
                 // Actualizar el tiempo transcurrido
                 elapsedTime += GetFrameTime();
@@ -138,6 +151,9 @@ int main() {
                 DrawText("YOU WIN! Loading next level", 150, 150, 40, GREEN);
                 DrawText("PRESS SPACE to MENU", 250, 195, 20, DARKGREEN);
 
+                DrawText(TextFormat("timeAcumulated: %.0f", timeAcumulated), 10, 70, 20, BLACK);
+                
+
                 if (IsKeyDown(KEY_SPACE)) actualScreen = GAME;
             }break;
             case WIN: {
@@ -146,7 +162,10 @@ int main() {
                 DrawText("PRESS SPACE to EXIT", 250, 195, 20, DARKGREEN);
 
                 //if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
-                if (IsKeyDown(KEY_SPACE)) globalRunning = false;
+                if (IsKeyDown(KEY_SPACE)) {
+                    //SaveStorageValue(STORAGE_POSITION_SCORE, score);
+                    globalRunning = false;
+                } 
             }break;
             case GAMEOVER: {
 
