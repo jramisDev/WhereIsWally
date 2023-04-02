@@ -7,8 +7,15 @@
 #include "init.h"
 #include "functions.h"
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
 
 Screens actualScreen = MENU;
+
+const char urlRecordFile[31] = "resources/saveGame/records.txt";
 
 int main() {
 
@@ -25,6 +32,9 @@ int main() {
     int levelTime = 20; // Duración del nivel en segundos
     float elapsedTime = 0.0f; // Tiempo transcurrido en segundos
     float timeAcumulated = 0.0f;
+    float totalGame = 0.0f;
+
+    bool bWriteFile = false;
 
     // Generar tres figuras aleatorias
     Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 50) };
@@ -64,11 +74,32 @@ int main() {
                 gameOver = false;
 
                 DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, RAYWHITE);
-                DrawText(GAME_TITLE, 250, 150, 40, RED);
-                DrawText("PRESS ENTER to GAME", 275, 195, 20, DARKGREEN);
+                DrawText(GAME_TITLE, 250, 100, 40, RED);
+                DrawText("PRESS ENTER to GAME", 275, 140, 20, DARKBLUE);
 
-                DrawText("CONTROLS:", 275, 250, 20, BLACK);
-                DrawText("LEFT CLICK mouse button to CONFIRM object", 275, 275, 15, BLACK);
+                DrawText("CONTROLS:", 275, 180, 20, BLACK);
+                DrawText("LEFT CLICK mouse button to CONFIRM object", 275, 200, 15, BLACK);
+
+
+                DrawText("Records:", 275, 235, 15, DARKGREEN);
+
+                std::string linea;
+                std::ifstream MyFile(urlRecordFile);
+                std::vector<int> numeros;
+                int numero;
+                while (MyFile >> numero) {
+                    numeros.push_back(numero);
+                }
+                MyFile.close();
+
+                // Ordenar el vector en orden descendente
+                std::sort(numeros.begin(), numeros.end(), std::greater<int>());
+
+                int j = 0;
+                for (int i = 0; i < 3 && i < numeros.size(); i++) {
+                    DrawText(std::to_string(numeros[i]).c_str(), 275, 250 + j, 15, DARKGREEN);
+                    j += 20;
+                }
 
                 if (IsKeyDown(KEY_ENTER)) actualScreen = GAME;
 
@@ -110,6 +141,7 @@ int main() {
 
                 // Si todas las figuras han sido eliminadas, pasar al siguiente nivel
                 if (!gameOver && score == 3) {
+                    totalGame = totalGame + elapsedTime;
                     timeAcumulated = levelTime - elapsedTime;
                     level++;
                     score = 0;
@@ -127,10 +159,6 @@ int main() {
                     
 
                 }
-
-                
-
-
 
                 // Mostrar el nivel y la puntuación en la pantalla
                 DrawText(TextFormat("Nivel: %i", level), 10, 10, 20, BLACK);
@@ -151,8 +179,7 @@ int main() {
                 DrawText("YOU WIN! Loading next level", 150, 150, 40, GREEN);
                 DrawText("PRESS SPACE to MENU", 250, 195, 20, DARKGREEN);
 
-                DrawText(TextFormat("timeAcumulated: %.0f", timeAcumulated), 10, 70, 20, BLACK);
-                
+                DrawText(TextFormat("timeAcumulated: %.0f", timeAcumulated), 10, 70, 20, BLACK);                
 
                 if (IsKeyDown(KEY_SPACE)) actualScreen = GAME;
             }break;
@@ -160,6 +187,22 @@ int main() {
 
                 DrawText("YOU WIN!", 250, 150, 40, GREEN);
                 DrawText("PRESS SPACE to EXIT", 250, 195, 20, DARKGREEN);
+
+                DrawText(TextFormat("Duration game: %.0f", totalGame), 10, 10, 20, BLACK);
+
+                //Guardamos el tiempo, poniendo un bool para hacerlo sólo una vez en el bucle
+                if (!bWriteFile) {
+
+                    std::ofstream MyFile(urlRecordFile, std::ios_base::app);
+
+                    if (MyFile.is_open()) {
+                        MyFile << "\n" << (int)totalGame;
+                        MyFile.close();
+                    }
+
+                    bWriteFile = true;
+                }
+
 
                 //if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
                 if (IsKeyDown(KEY_SPACE)) {
