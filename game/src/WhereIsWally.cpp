@@ -4,6 +4,8 @@
 #include "init.h"
 #include "functions.h"
 
+Screens actualScreen = MENU;
+
 int main() {
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Where is Wally?");
@@ -34,75 +36,120 @@ int main() {
     Vector2 triP3 = { triPos.x, triPos.y - 25 };
     // Cada figura debe tener una posición aleatoria en la pantalla y una forma aleatoria
 
-    while (!gameOver && !WindowShouldClose()) {
+    //!gameOver && !WindowShouldClose()
+    while (!WindowShouldClose()) {
 
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
 
-        // Dibujar las tres figuras generadas aleatoriamente
-        DrawCircle(circlePos.x, circlePos.y, circleRadius, circleColor);
-        DrawRectangle(rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, rectWidth, rectHeight, rectColor);
-        DrawTriangle(triP1, triP2, triP3, triColor);
+        switch (actualScreen) {
+            case MENU: {
 
-        // Si el usuario hace clic en una figura, aumentar la puntuación y eliminar la figura
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                actualScreen = MENU;
 
-            Vector2 mousePos = GetMousePosition();
+                level = 1;
+                score = 0;
+                gameOver = false;
 
-            if (CheckCollisionPointCircle(mousePos, circlePos, circleRadius)) {
+                DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, RAYWHITE);
+                DrawText(GAME_TITLE, 250, 150, 40, RED);
+                DrawText("PRESS ENTER to GAME", 275, 195, 20, DARKGREEN);
 
-                score++;
-                circlePos = { -100, -100 }; // Eliminar la figura
+                DrawText("CONTROLS:", 275, 250, 20, BLACK);
+                DrawText("LEFT CLICK mouse button to CONFIRM object", 275, 275, 15, BLACK);
 
-            } else if (CheckCollisionPointRec(mousePos, { rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, (float)rectWidth, (float)rectHeight })) {
-                                
-                score++;
-                rectPos = { -100, -100 }; // Eliminar la figura
+                if (IsKeyDown(KEY_ENTER)) actualScreen = GAME;
+            }break;
+            case GAME: {
 
-            } else if (CheckCollisionPointTriangle(mousePos, triP1, triP2, triP3)) {
-                
-                score++;
-                triPos = { -100, -100 }; // Eliminar la figura
-                triP1 = { -500, -500 };
-                triP2 = { -500, -500 };
-                triP3 = { -500, -500 };
+                // Dibujar las tres figuras generadas aleatoriamente
+                DrawCircle(circlePos.x, circlePos.y, circleRadius, circleColor);
+                DrawRectangle(rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, rectWidth, rectHeight, rectColor);
+                DrawTriangle(triP1, triP2, triP3, triColor);
 
-            }
-        }
+                // Si el usuario hace clic en una figura, aumentar la puntuación y eliminar la figura
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
 
-        // Si todas las figuras han sido eliminadas, pasar al siguiente nivel
-        if (score == 3) {
-            level++;
-            score = 0;
-            elapsedTime = 0.0f; // Reiniciar el tiempo transcurrido
+                    Vector2 mousePos = GetMousePosition();
 
-            GenerateRandomShapes(circlePos, circleRadius, circleColor,
-                rectPos, rectWidth, rectHeight, rectColor,
-                triPos, triP1, triP2, triP3, triColor);
+                    if (CheckCollisionPointCircle(mousePos, circlePos, circleRadius)) {
 
-            levelTime = 10;
+                        score++;
+                        circlePos = { -100, -100 }; // Eliminar la figura
 
-        }
+                    }
+                    else if (CheckCollisionPointRec(mousePos, { rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, (float)rectWidth, (float)rectHeight })) {
 
-        // Mostrar el nivel y la puntuación en la pantalla
-        DrawText(TextFormat("Nivel: %i", level), 10, 10, 20, BLACK);
-        DrawText(TextFormat("Tiempo: %.0f", levelTime - elapsedTime), 10, 30, 20, BLACK);
+                        score++;
+                        rectPos = { -100, -100 }; // Eliminar la figura
 
-        // Actualizar el tiempo transcurrido
-        elapsedTime += GetFrameTime();
-        if (elapsedTime >= levelTime) {
-            gameOver = true; // El tiempo ha terminado
-        }
+                    }
+                    else if (CheckCollisionPointTriangle(mousePos, triP1, triP2, triP3)) {
+
+                        score++;
+                        triPos = { -100, -100 }; // Eliminar la figura
+                        triP1 = { -500, -500 };
+                        triP2 = { -500, -500 };
+                        triP3 = { -500, -500 };
+
+                    }
+                }
+
+                // Si todas las figuras han sido eliminadas, pasar al siguiente nivel
+                if (!gameOver && score == 3) {
+                    level++;
+                    score = 0;
+                    elapsedTime = 0.0f; // Reiniciar el tiempo transcurrido
+
+                    GenerateRandomShapes(circlePos, circleRadius, circleColor,
+                        rectPos, rectWidth, rectHeight, rectColor,
+                        triPos, triP1, triP2, triP3, triColor);
+
+                    levelTime = 10;
+
+                    if (level < 4) actualScreen = NEXTLEVEL;
+                    if (level == 4) actualScreen = WIN;
+
+                }
+
+                // Mostrar el nivel y la puntuación en la pantalla
+                DrawText(TextFormat("Nivel: %i", level), 10, 10, 20, BLACK);
+                DrawText(TextFormat("Tiempo: %.0f", levelTime - elapsedTime), 10, 30, 20, BLACK);
+
+                // Actualizar el tiempo transcurrido
+                elapsedTime += GetFrameTime();
+                if (elapsedTime >= levelTime) {
+                    gameOver = true; // El tiempo ha terminado
+                    actualScreen = GAMEOVER;
+                }
+
+            }break;
+            case NEXTLEVEL: {
+
+                DrawText("YOU WIN! Loading next level", 150, 150, 40, GREEN);
+                DrawText("PRESS SPACE to MENU", 250, 195, 20, DARKGREEN);
+
+                if (IsKeyDown(KEY_SPACE)) actualScreen = GAME;
+            }break;
+            case WIN: {
+
+                DrawText("YOU WIN!", 250, 150, 40, GREEN);
+                DrawText("PRESS SPACE to MENU", 250, 195, 20, DARKGREEN);
+
+                if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
+            }break;
+            case GAMEOVER: {
+
+                DrawText("Fin del juego", SCREEN_WIDTH / 2 - MeasureText("Fin del juego", 40) / 2, SCREEN_HEIGHT / 2 - 40, 40, BLACK);
+                DrawText("PRESS SPACE to MENU", 250, 200, 20, DARKGREEN);
+
+                if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
+            }break;
+        }        
 
         EndDrawing();
     }
-
-    // Mostrar el mensaje de fin de juego
-    ClearBackground(RAYWHITE);
-    DrawText("Fin del juego", SCREEN_WIDTH / 2 - MeasureText("Fin del juego", 40) / 2, SCREEN_HEIGHT / 2 - 40, 40, BLACK);
-    EndDrawing();
-    WaitTime(5);
 
     CloseWindow();
 

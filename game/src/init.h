@@ -10,7 +10,7 @@
 
 #define SKY_WIDTH 14
 
-enum Screens { MENU, GAME, WIN, GAMEOVER };
+enum Screens { MENU, GAME, NEXTLEVEL, WIN, GAMEOVER };
 
 //Background
 Texture2D background;
