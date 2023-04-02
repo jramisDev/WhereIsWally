@@ -3,7 +3,6 @@
 
     Añadir cuadro de color sobre el texto de arriba a la izquierda para que se vea bien el tiempo
     Figuras arriba a la derecha, sobre un fondo de color para que se vean, se eliminan los iconos al pulsar sobre la figura.
-    Bug del cambio de pantallas
     Bug tiempo acumulado al pasar de pantalla
     Refactirar código
 
@@ -63,15 +62,15 @@ int main() {
 
         ClearBackground(RAYWHITE);
 
-        std::cout << "\n\nPantalla actual: " << actualScreen;
+        //std::cout << "\nPantalla actual: " << actualScreen;
+        std::cout << "\nGameOver: " << gameOver;
 
         switch (actualScreen) {
             case MENU: {
 
-                actualScreen = MENU;
-
                 level = 1;
                 score = 0;
+                elapsedTime = 0.0f;
                 gameOver = false;
 
                 DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, RAYWHITE);
@@ -123,14 +122,12 @@ int main() {
                         score++;
                         circlePos = { -100, -100 }; // Eliminar la figura
 
-                    }
-                    else if (CheckCollisionPointRec(mousePos, { rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, (float)rectWidth, (float)rectHeight })) {
+                    } else if (CheckCollisionPointRec(mousePos, { rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, (float)rectWidth, (float)rectHeight })) {
 
                         score++;
                         rectPos = { -100, -100 }; // Eliminar la figura
 
-                    }
-                    else if (CheckCollisionPointTriangle(mousePos, triP1, triP2, triP3)) {
+                    } else if (CheckCollisionPointTriangle(mousePos, triP1, triP2, triP3)) {
 
                         score++;
                         triPos = { -100, -100 }; // Eliminar la figura
@@ -205,19 +202,17 @@ int main() {
                     bWriteFile = true;
                 }
 
-
-                //if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
-                if (IsKeyDown(KEY_SPACE)) {
-                    //SaveStorageValue(STORAGE_POSITION_SCORE, score);
-                    globalRunning = false;
-                } 
+                if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
+               
             }break;
             case GAMEOVER: {
+
+                if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
 
                 DrawText("Fin del juego", SCREEN_WIDTH / 2 - MeasureText("Fin del juego", 40) / 2, SCREEN_HEIGHT / 2 - 40, 40, BLACK);
                 DrawText("PRESS SPACE to MENU", 250, 200, 20, DARKGREEN);
 
-                if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
+                
             }break;
         }        
 
