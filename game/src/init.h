@@ -8,12 +8,7 @@
 #define SCREEN_HEIGHT 400
 #define GAME_TITLE "Where is Wally?"
 
-#define SKY_WIDTH 14
-
 enum Screens { MENU, GAME, NEXTLEVEL, WIN, GAMEOVER };
-
-//Background
-Texture2D background;
 
 const char urlRecordFile[31] = "resources/saveGame/records.txt";
 

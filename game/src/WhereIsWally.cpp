@@ -15,6 +15,13 @@ int main() {
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE);
 
+    //Background
+    Texture2D background = LoadTexture("resources/background/one.png");
+    Texture2D backgroundTwo = LoadTexture("resources/background/two.png");
+    Texture2D backgroundThree = LoadTexture("resources/background/three.png");
+
+    
+
     SetTargetFPS(FPS);
 
     float elapsedTime = 0.0f; // Tiempo transcurrido en segundos
@@ -90,6 +97,8 @@ int main() {
             }break;
             case GAME: {
 
+                DrawTexture(background, 0, 0, WHITE);
+
                 // Dibujar las tres figuras generadas aleatoriamente
                 DrawCircle(circlePos.x, circlePos.y, circleRadius, circleColor);
                 DrawRectangle(rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, rectWidth, rectHeight, rectColor);
@@ -136,11 +145,11 @@ int main() {
                         triPos, triP1, triP2, triP3, triColor);
 
                     
+                    if (level == 2) background = backgroundTwo;
+                    if (level == 3) background = backgroundThree;
 
                     if (level < 4) actualScreen = NEXTLEVEL;
-                    if (level == 4) actualScreen = WIN;
-
-                    
+                    if (level == 4) actualScreen = WIN;                   
 
                 }
 
@@ -180,7 +189,7 @@ int main() {
                     std::ofstream MyFile(urlRecordFile, std::ios_base::app);
 
                     if (MyFile.is_open()) {
-                        MyFile << "\n" << (int)totalGame;
+                        MyFile << "\n" << (int)totalGame+1;
                         MyFile.close();
                     }
 
