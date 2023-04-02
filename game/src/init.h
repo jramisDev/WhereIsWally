@@ -15,6 +15,22 @@ enum Screens { MENU, GAME, NEXTLEVEL, WIN, GAMEOVER };
 //Background
 Texture2D background;
 
+const char urlRecordFile[31] = "resources/saveGame/records.txt";
+
+Screens actualScreen = MENU;
+
+
+bool globalRunning = true;
+
+int level = 1;
+int score = 0;
+bool gameOver = false;
+
+int levelTime = 20; // Duración del nivel en segundos
+
+bool bWriteFile = false;
+
+//Functions
 Color GetRandomColor();
 
 int GetRandomShape();

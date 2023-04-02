@@ -2,7 +2,6 @@
 #pragma warning(disable : 4838)
 #pragma warning(disable : 4244)
 
-
 #include "raylib.h"
 #include "init.h"
 #include "functions.h"
@@ -12,29 +11,15 @@
 #include <vector>
 #include <algorithm>
 
-
-Screens actualScreen = MENU;
-
-const char urlRecordFile[31] = "resources/saveGame/records.txt";
-
 int main() {
 
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Where is Wally?");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE);
 
     SetTargetFPS(FPS);
 
-    bool globalRunning = true;
-
-    int level = 1;
-    int score = 0;
-    bool gameOver = false;
-
-    int levelTime = 20; // Duración del nivel en segundos
     float elapsedTime = 0.0f; // Tiempo transcurrido en segundos
     float timeAcumulated = 0.0f;
     float totalGame = 0.0f;
-
-    bool bWriteFile = false;
 
     // Generar tres figuras aleatorias
     Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 50) };
@@ -79,7 +64,6 @@ int main() {
 
                 DrawText("CONTROLS:", 275, 180, 20, BLACK);
                 DrawText("LEFT CLICK mouse button to CONFIRM object", 275, 200, 15, BLACK);
-
 
                 DrawText("Records:", 275, 235, 15, DARKGREEN);
 
