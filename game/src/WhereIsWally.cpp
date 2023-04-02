@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "init.h"
 #include "functions.h"
+#include <iostream>
 
 Screens actualScreen = MENU;
 
@@ -10,7 +11,7 @@ int main() {
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Where is Wally?");
 
-    SetTargetFPS(FPS);
+    //SetTargetFPS(FPS);
 
     int level = 1;
     int score = 0;
@@ -43,6 +44,8 @@ int main() {
 
         ClearBackground(RAYWHITE);
 
+        std::cout << "\n\nPantalla actual: " << actualScreen;
+
         switch (actualScreen) {
             case MENU: {
 
@@ -60,6 +63,7 @@ int main() {
                 DrawText("LEFT CLICK mouse button to CONFIRM object", 275, 275, 15, BLACK);
 
                 if (IsKeyDown(KEY_ENTER)) actualScreen = GAME;
+
             }break;
             case GAME: {
 
