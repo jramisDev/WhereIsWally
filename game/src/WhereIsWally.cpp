@@ -2,15 +2,15 @@
     TO-DO:
 
     Añadir cuadro de color sobre el texto de arriba a la izquierda para que se vea bien el tiempo
+    Figuras arriba a la derecha, sobre un fondo de color para que se vean, se eliminan los iconos al pulsar sobre la figura.
     Bug del cambio de pantallas
     Bug tiempo acumulado al pasar de pantalla
-    Figuras arriba a la derecha, sobre un fondo de color para que se vean
     Refactirar código
 
 */
 
 #pragma once
-#pragma warning(disable : 4838)
+#pragma warning(disable : 4838)//Quito warnings de cast que me molestan
 #pragma warning(disable : 4244)
 
 #include "raylib.h"
@@ -29,9 +29,7 @@ int main() {
     //Background
     Texture2D background = LoadTexture("resources/background/one.png");
     Texture2D backgroundTwo = LoadTexture("resources/background/two.png");
-    Texture2D backgroundThree = LoadTexture("resources/background/three.png");
-
-    
+    Texture2D backgroundThree = LoadTexture("resources/background/three.png");    
 
     SetTargetFPS(FPS);
 
@@ -40,9 +38,9 @@ int main() {
     float totalGame = 0.0f;
 
     // Generar tres figuras aleatorias
-    Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 50) };
-    Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 50) };
-    Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 50) };
+    Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 100) };
+    Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 100) };
+    Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 100) };
 
     Color circleColor = GetRandomColor();
     Color rectColor = GetRandomColor();
