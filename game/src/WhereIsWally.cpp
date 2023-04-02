@@ -11,7 +11,9 @@ int main() {
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Where is Wally?");
 
-    //SetTargetFPS(FPS);
+    SetTargetFPS(FPS);
+
+    bool globalRunning = true;
 
     int level = 1;
     int score = 0;
@@ -37,8 +39,10 @@ int main() {
     Vector2 triP3 = { triPos.x, triPos.y - 25 };
     // Cada figura debe tener una posición aleatoria en la pantalla y una forma aleatoria
 
-    //!gameOver && !WindowShouldClose()
-    while (!WindowShouldClose()) {
+
+    while (globalRunning) {
+
+        if (WindowShouldClose()) globalRunning = false;
 
         BeginDrawing();
 
@@ -139,9 +143,10 @@ int main() {
             case WIN: {
 
                 DrawText("YOU WIN!", 250, 150, 40, GREEN);
-                DrawText("PRESS SPACE to MENU", 250, 195, 20, DARKGREEN);
+                DrawText("PRESS SPACE to EXIT", 250, 195, 20, DARKGREEN);
 
-                if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
+                //if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
+                if (IsKeyDown(KEY_SPACE)) globalRunning = false;
             }break;
             case GAMEOVER: {
 
