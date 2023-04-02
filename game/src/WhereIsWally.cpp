@@ -1,3 +1,14 @@
+/*
+    TO-DO:
+
+    Añadir cuadro de color sobre el texto de arriba a la izquierda para que se vea bien el tiempo
+    Bug del cambio de pantallas
+    Bug tiempo acumulado al pasar de pantalla
+    Figuras arriba a la derecha, sobre un fondo de color para que se vean
+    Refactirar código
+
+*/
+
 #pragma once
 #pragma warning(disable : 4838)
 #pragma warning(disable : 4244)
