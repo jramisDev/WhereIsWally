@@ -1,43 +1,14 @@
+#pragma once
+
 #include "raylib.h"
-
-int screenWidth = 800;
-int screenHeight = 450;
-
-// Devuelve un color aleatorio
-Color GetRandomColor(){
-
-    int r = GetRandomValue(0, 255);
-    int g = GetRandomValue(0, 255);
-    int b = GetRandomValue(0, 255);
-
-    return Color{ static_cast<unsigned char>(r), static_cast<unsigned char>(g), static_cast<unsigned char>(b), 255 };
-
-}
-
-// Devuelve un número aleatorio entre 1 y 5
-int GetRandomShape(){
-    return GetRandomValue(1, 5);
-}
-
-void GenerateRandomShapes(Vector2& circlePos, int& circleRadius, Color& circleColor,
-    Vector2& rectPos, int& rectWidth, int& rectHeight, Color& rectColor,
-    Vector2& triPos, Vector2& triP1, Vector2& triP2, Vector2& triP3, Color& triColor){
-
-    circlePos = { (float)GetRandomValue(50, screenWidth - 50), (float)GetRandomValue(50, screenHeight - 50) };
-
-    rectPos = { (float)GetRandomValue(50, screenWidth - 50), (float)GetRandomValue(50, screenHeight - 50) };
-
-    triPos = { (float)GetRandomValue(50, screenWidth - 50), (float)GetRandomValue(50, screenHeight - 50) };
-    triP1 = { triPos.x - 25, triPos.y + 25 };
-    triP2 = { triPos.x + 25, triPos.y + 25 };
-    triP3 = { triPos.x, triPos.y - 25 };
-}
+#include "init.h"
+#include "functions.h"
 
 int main() {
 
-    InitWindow(screenWidth, screenHeight, "Where is Wally?");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Where is Wally?");
 
-    SetTargetFPS(60);
+    SetTargetFPS(FPS);
 
     int level = 1;
     int score = 0;
@@ -47,9 +18,9 @@ int main() {
     float elapsedTime = 0.0f; // Tiempo transcurrido en segundos
 
     // Generar tres figuras aleatorias
-    Vector2 circlePos = { GetRandomValue(50, screenWidth - 50), GetRandomValue(50, screenHeight - 50) };
-    Vector2 rectPos = { GetRandomValue(50, screenWidth - 50), GetRandomValue(50, screenHeight - 50) };
-    Vector2 triPos = { GetRandomValue(50, screenWidth - 50), GetRandomValue(50, screenHeight - 50) };
+    Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 50) };
+    Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 50) };
+    Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 50) };
 
     Color circleColor = GetRandomColor();
     Color rectColor = GetRandomColor();
@@ -129,7 +100,7 @@ int main() {
 
     // Mostrar el mensaje de fin de juego
     ClearBackground(RAYWHITE);
-    DrawText("Fin del juego", screenWidth / 2 - MeasureText("Fin del juego", 40) / 2, screenHeight / 2 - 40, 40, BLACK);
+    DrawText("Fin del juego", SCREEN_WIDTH / 2 - MeasureText("Fin del juego", 40) / 2, SCREEN_HEIGHT / 2 - 40, 40, BLACK);
     EndDrawing();
     WaitTime(5);
 
