@@ -1,11 +1,10 @@
 /*
     TO-DO:
-    Bug tiempo acumulado al pasar de pantalla
     Refactirar código
 
 */
 
-#pragma once
+#pragma once 
 #pragma warning(disable : 4838)//Quito warnings de cast que me molestan
 #pragma warning(disable : 4244)
 
@@ -13,11 +12,6 @@
 #include "Init.h"
 #include "Functions.h"
 #include "LevelData.h"
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <algorithm>
 
 // Generar tres figuras aleatorias
 Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
@@ -40,6 +34,8 @@ Vector2 triP3 = { triPos.x, triPos.y - 25 };
 bool rectUI = false;
 bool circUI = false;
 bool triUI = false;
+
+LevelData game;
 
 
 int main() {
@@ -105,10 +101,8 @@ void initApp() {
 
 void mainScreen() {
 
-    level = 1;
-    score = 0;
-    elapsedTime = 0.0f;
-    gameOver = false;
+    game = LevelData();
+    
     rectUI = false;
     circUI = false;
     triUI = false;
@@ -122,23 +116,7 @@ void mainScreen() {
 
     DrawText("Records:", 275, 235, 15, DARKGREEN);
 
-    std::string linea;
-    std::ifstream MyFile(urlRecordFile);
-    std::vector<int> numeros;
-    int numero;
-    while (MyFile >> numero) {
-        numeros.push_back(numero);
-    }
-    MyFile.close();
-
-    // Ordenar el vector en orden descendente
-    std::sort(numeros.begin(), numeros.end(), std::greater<int>());
-
-    int j = 0;
-    for (int i = 0; i < 3 && i < numeros.size(); i++) {
-        DrawText(std::to_string(numeros[i]).c_str(), 275, 250 + j, 15, DARKGREEN);
-        j += 20;
-    }
+    loadRecord();
 
     if (IsKeyDown(KEY_ENTER)) actualScreen = GAME;
 
@@ -148,14 +126,13 @@ void gameScreen() {
 
     DrawTexture(background, 0, 0, WHITE);
 
-
-    DrawRectangle(0, 0, 150, 40, { 0,0,0,122 });//Left backbroundUI
-    DrawRectangle(SCREEN_WIDTH - 300, 0, 300, 100, { 0,0,0,122 });//Right backgroundUI
+    DrawRectangle(0, 0, 150, 40, BLACK);//Left backbroundUI
+    DrawRectangle(SCREEN_WIDTH - 300, 0, 300, 100, BLACK);//Right backgroundUI
 
     // Dibujar las tres figuras en la UI
     if (!circUI) DrawCircle(550, 50, circleRadius, circleColor);
-    if (!rectUI)  DrawRectangle(600, 25, rectWidth, rectHeight, rectColor);
-    if (!triUI) DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triColor);
+    if (!rectUI) DrawRectangle(600, 25, rectWidth, rectHeight, rectColor);
+    if (!triUI)  DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triColor);
 
     // Dibujar las tres figuras generadas aleatoriamente
     DrawCircle(circlePos.x, circlePos.y, circleRadius, circleColor);
@@ -169,21 +146,21 @@ void gameScreen() {
 
         if (CheckCollisionPointCircle(mousePos, circlePos, circleRadius)) {
 
-            score++;
+            game.sumScore();//score++;
             circlePos = { -100, -100 }; // Eliminar la figura
             circUI = true;
 
         }
         else if (CheckCollisionPointRec(mousePos, { rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, (float)rectWidth, (float)rectHeight })) {
 
-            score++;
+            game.sumScore(); //score++;
             rectPos = { -100, -100 }; // Eliminar la figura
             rectUI = true;
 
         }
         else if (CheckCollisionPointTriangle(mousePos, triP1, triP2, triP3)) {
 
-            score++;
+            game.sumScore();// score++;
             triPos = { -100, -100 }; // Eliminar la figura
             triP1 = { -500, -500 };
             triP2 = { -500, -500 };
@@ -194,12 +171,15 @@ void gameScreen() {
     }
 
     // Si todas las figuras han sido eliminadas, pasar al siguiente nivel
-    if (!gameOver && score == 3) {
-        totalGame = totalGame + elapsedTime;
-        timeAcumulated = levelTime - elapsedTime;
-        level++;
-        score = 0;
-        elapsedTime = 0.0f; // Reiniciar el tiempo transcurrido
+    if (!game.isGameOver() && game.getScore() == 3) {
+
+        totalGame = totalGame + game.getElapsedTime();
+        timeAcumulated = game.getLevelTime() - game.getElapsedTime();
+
+        game.sumLevel();
+        game.resetScore();
+        game.resetElapsedTime();// Reiniciar el tiempo transcurrido
+
         rectUI = false;
         circUI = false;
         triUI = false;
@@ -209,21 +189,21 @@ void gameScreen() {
             triPos, triP1, triP2, triP3, triColor);
 
 
-        if (level == 2) background = backgroundTwo;
-        if (level == 3) background = backgroundThree;
+        if (game.getLevel() == 2) background = backgroundTwo;
+        if (game.getLevel() == 3) background = backgroundThree;
 
-        if (level < 4) actualScreen = NEXTLEVEL;
-        if (level == 4) actualScreen = WIN;
+        if (game.getLevel() < 4) actualScreen = NEXTLEVEL;
+        if (game.getLevel() == 4) actualScreen = WIN;
 
     }
 
-    // Mostrar el nivel y la puntuación en la pantalla
-    DrawText(TextFormat("Tiempo: %.0f", levelTime - elapsedTime), 10, 10, 20, WHITE);
+    DrawText(TextFormat("Tiempo: %.0f", game.getLevelTime() - game.getElapsedTime()), 10, 10, 20, WHITE);
 
     // Actualizar el tiempo transcurrido
-    elapsedTime += GetFrameTime();
-    if (elapsedTime >= levelTime) {
-        gameOver = true; // El tiempo ha terminado
+    game.addElapsedTime(GetFrameTime());
+
+    if (game.getElapsedTime() >= game.getLevelTime()) {
+        game.setGameOver(true); // El tiempo ha terminado
         actualScreen = GAMEOVER;
     }
 
@@ -238,7 +218,7 @@ void nextScreen() {
 
     if (IsKeyDown(KEY_SPACE)) {
         actualScreen = GAME;
-        levelTime = levelTime + timeAcumulated;
+        game.sumLevelTime(timeAcumulated);
         timeAcumulated = 0;
 
     }
@@ -252,18 +232,7 @@ void winScreen() {
 
     DrawText(TextFormat("Duration game: %.0f", totalGame), 10, 10, 20, BLACK);
 
-    //Guardamos el tiempo, poniendo un bool para hacerlo sólo una vez en el bucle
-    if (!bWriteFile) {
-
-        std::ofstream MyFile(urlRecordFile, std::ios_base::app);
-
-        if (MyFile.is_open()) {
-            MyFile << "\n" << (int)totalGame + 1;
-            MyFile.close();
-        }
-
-        bWriteFile = true;
-    }
+    saveRecord();
 
     if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
 
@@ -277,3 +246,4 @@ void endScreen() {
     DrawText("PRESS SPACE to MENU", 250, 200, 20, DARKGREEN);
 
 }
+

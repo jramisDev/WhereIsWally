@@ -1,6 +1,11 @@
 #pragma once
 
 #include "raylib.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <algorithm>
 
 // Devuelve un color aleatorio
 Color GetRandomColor() {
@@ -10,7 +15,6 @@ Color GetRandomColor() {
     int b = GetRandomValue(0, 255);
 
     return Color{ static_cast<unsigned char>(r), static_cast<unsigned char>(g), static_cast<unsigned char>(b), 255 };
-
 }
 
 // Devuelve un número aleatorio entre 1 y 5
@@ -30,4 +34,44 @@ void GenerateRandomShapes(Vector2& circlePos, int& circleRadius, Color& circleCo
     triP1 = { triPos.x - 25, triPos.y + 25 };
     triP2 = { triPos.x + 25, triPos.y + 25 };
     triP3 = { triPos.x, triPos.y - 25 };
+}
+
+void loadRecord() {
+
+    std::string linea;
+    std::ifstream MyFile(urlRecordFile);
+    std::vector<int> numeros;
+    int numero;
+
+    while (MyFile >> numero) {
+        numeros.push_back(numero);
+    }
+    MyFile.close();
+
+    // Ordenar el vector en orden descendente
+    std::sort(numeros.begin(), numeros.end(), std::greater<int>());
+
+    int j = 0;
+    for (int i = 0; i < 3 && i < numeros.size(); i++) {
+        DrawText(std::to_string(numeros[i]).c_str(), 275, 250 + j, 15, DARKGREEN);
+        j += 20;
+    }
+
+}
+
+void saveRecord() {
+
+    //Guardamos el tiempo, poniendo un bool para hacerlo sólo una vez en el bucle
+    if (!bWriteFile) {
+
+        std::ofstream MyFile(urlRecordFile, std::ios_base::app);
+
+        if (MyFile.is_open()) {
+            MyFile << "\n" << (int)totalGame;
+            MyFile.close();
+        }
+
+        bWriteFile = true;
+    }
+
 }

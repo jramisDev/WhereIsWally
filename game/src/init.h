@@ -28,7 +28,7 @@ int level = 1;
 int score = 0;
 bool gameOver = false;
 
-int levelTime = 20; // Duración del nivel en segundos
+int levelTime = 5; // Duración del nivel en segundos
 
 float elapsedTime = 0.0f; // Tiempo transcurrido en segundos
 float timeAcumulated = 0.0f;
@@ -54,3 +54,7 @@ void nextScreen();
 void winScreen();
 
 void endScreen();
+
+void saveRecord();
+
+void loadRecord();

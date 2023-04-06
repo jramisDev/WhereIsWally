@@ -4,53 +4,64 @@
 
 class LevelData {
 
-	Rectangle rectTime;
-	Rectangle rectFigures;
-	Color backgroundColor;
+	//Level Data
+	int level;
+	int score;
+	int levelTime;
 
+	float elapsedTime = 0.0f;
+	float timeAcumulated = 0.0f;
+	float totalGame = 0.0f;
+
+	bool gameOver = false;
+
+	//Rectangulo
+	//Rectangle rectFigure;
+	//Color backgroundColor;
+
+	//Circulo
+
+	//Triangulo
 
 public:
 
 	LevelData() {
 
-		Rectangle r;
-		r.x = 0;
-		r.y = 0;
-		r.width = 200;
-		r.height = 100;
-		rectTime = r;
+		level = 1;
+		levelTime = 10;
+		score = 0;
 
-		r.x = SCREEN_WIDTH - 200;
-		r.y = 0;
-		r.width = 200;
-		r.height = 100;
-		rectFigures = r;
+		elapsedTime = 0.0f;
+		timeAcumulated = 0.0f;
+		totalGame = 0.0f;
 
-		backgroundColor = {0,0,0,122};//Negro un poco transparente
+		gameOver = false;
 
-		//DrawRectangle(0, 0, 200, 100, BLACK);
-		//DrawRectangle(SCREEN_WIDTH - 200, 0, 200, 100, BLACK);
 	}
 
+	int getLevel() { return level; }
+	void sumLevel() { level++; }
 
-	//UI(Color pNormal, Color pHover, int pDescLength, char* pDesc, float posX, float posY, float pWidth, float pHeight) {
-	//	backgroundColor = pNormal;
+	int getLevelTime() { return levelTime; }
+	void sumLevelTime(int addTime) { levelTime += addTime; }
 
-	//	Rectangle r;
-	//	r.x = posX;
-	//	r.y = posY;
-	//	r.width = pWidth;
-	//	r.height = pHeight;
-	//	rect = r;
-	//}
+	int getScore() { return score; }
+	void sumScore() { score++; };
+	void resetScore() { score = 0; }
 
-	void Draw() {
+	float getElapsedTime() { return elapsedTime; };
+	void addElapsedTime(float pElapsedTime) { elapsedTime += pElapsedTime; }
+	void resetElapsedTime() { elapsedTime = 0.0f; }
+
+	bool isGameOver() { return gameOver; }
+	void setGameOver(bool pGameOver) { gameOver = pGameOver; }
 
 
+	//void Draw() {
 
-		DrawRectangleRec(rectTime, backgroundColor);
-		DrawRectangleRec(rectFigures, backgroundColor);
+	//	DrawRectangleRec(rectTime, backgroundColor);
+	//	DrawRectangleRec(rectFigures, backgroundColor);
 
-	};
+	//};
 
 };
