@@ -1,10 +1,8 @@
 /*
     TO-DO:
-    Refactirar código
-    No cambian los colores
+    Refactirar código figuras
 */
 
-#pragma once 
 #pragma warning(disable : 4838)//Quito warnings de cast que me molestan
 #pragma warning(disable : 4244)
 
@@ -18,9 +16,9 @@ Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100,
 Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
 Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
 
-Color circleColor = GetRandomColor();
-Color rectColor = GetRandomColor();
-Color triColor = GetRandomColor();
+Color circleColor;
+Color rectColor;
+Color triColor;
 
 int circleRadius = 25;
 int rectWidth = 100;
@@ -50,7 +48,7 @@ int main() {
 
         ClearBackground(RAYWHITE);
 
-        switch (actualScreen) {
+        switch (game.getScreenActual()) {
             case MENU: {
 
                 mainScreen();
@@ -102,13 +100,14 @@ void initApp() {
 void mainScreen() {
 
     game = LevelData();
-    //rectangle = Figures();
-    //circle = Figures();
-    //triangle = Figures();
     
     rectUI = false;
     circUI = false;
     triUI = false;
+
+    circleColor = GetRandomColor();
+    rectColor = GetRandomColor();
+    triColor = GetRandomColor();
 
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, RAYWHITE);
     DrawText(GAME_TITLE, 250, 100, 40, RED);
@@ -121,7 +120,7 @@ void mainScreen() {
 
     loadRecord();
 
-    if (IsKeyDown(KEY_ENTER)) actualScreen = GAME;
+    if (IsKeyDown(KEY_ENTER)) game.setScreenActual(GAME);
 
 }
 
@@ -133,7 +132,7 @@ void gameScreen() {
     DrawRectangle(SCREEN_WIDTH - 300, 0, 300, 100, BLACK);//Right backgroundUI
 
     // Dibujar las tres figuras en la UI
-    if (!circUI)     DrawCircle(550, 50, circleRadius, circleColor);
+    if (!circUI)  DrawCircle(550, 50, circleRadius, circleColor);
     if (!rectUI)  DrawRectangle(600, 25, rectWidth, rectHeight, rectColor);
     if (!triUI)   DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triColor);
 
@@ -176,9 +175,8 @@ void gameScreen() {
     // Si todas las figuras han sido eliminadas, pasar al siguiente nivel
     if (!game.isGameOver() && game.getScore() == 3) {
 
-        //totalGame = totalGame + game.getElapsedTime();
         game.addTotalGame(game.getElapsedTime());
-        timeAcumulated = game.getLevelTime() - game.getElapsedTime();
+        game.setTimeAcumulated(game.getLevelTime() - game.getElapsedTime());
 
         game.sumLevel();
         game.resetScore();
@@ -188,20 +186,15 @@ void gameScreen() {
         circUI = false;
         triUI = false;
 
-        //rectangle = Figures();
-        //circle = Figures();
-        //triangle = Figures();
-
         GenerateRandomShapes(circlePos, circleRadius, circleColor,
             rectPos, rectWidth, rectHeight, rectColor,
             triPos, triP1, triP2, triP3, triColor);
 
-
         if (game.getLevel() == 2) background = backgroundTwo;
         if (game.getLevel() == 3) background = backgroundThree;
 
-        if (game.getLevel() < 4) actualScreen = NEXTLEVEL;
-        if (game.getLevel() == 4) actualScreen = WIN;
+        if (game.getLevel() < 4) game.setScreenActual(NEXTLEVEL);
+        if (game.getLevel() == 4) game.setScreenActual(WIN);
 
     }
 
@@ -212,7 +205,7 @@ void gameScreen() {
 
     if (game.getElapsedTime() >= game.getLevelTime()) {
         game.setGameOver(true); // El tiempo ha terminado
-        actualScreen = GAMEOVER;
+        game.setScreenActual(GAMEOVER);
     }
 
 }
@@ -222,13 +215,12 @@ void nextScreen() {
     DrawText("YOU WIN! Loading next level", 150, 150, 40, GREEN);
     DrawText("PRESS SPACE to MENU", 250, 195, 20, DARKGREEN);
 
-    DrawText(TextFormat("timeAcumulated: %.0f", timeAcumulated), 10, 10, 20, BLACK);
+    DrawText(TextFormat("timeAcumulated: %.0f", game.getTimeAcumulated()), 10, 10, 20, BLACK);
 
     if (IsKeyDown(KEY_SPACE)) {
-        actualScreen = GAME;
-        game.sumLevelTime(timeAcumulated);
-        timeAcumulated = 0;
-
+        game.setScreenActual(GAME);
+        game.sumLevelTime(game.getTimeAcumulated());
+        game.resetTimeAcumulated();
     }
 
 }
@@ -242,13 +234,13 @@ void winScreen() {
 
     saveRecord(game.getTotalGame());
 
-    if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
+    if (IsKeyDown(KEY_SPACE)) game.setScreenActual(MENU);
 
 }
 
 void endScreen() {
 
-    if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
+    if (IsKeyDown(KEY_SPACE)) game.setScreenActual(MENU);
 
     DrawText("Fin del juego", SCREEN_WIDTH / 2 - MeasureText("Fin del juego", 40) / 2, SCREEN_HEIGHT / 2 - 40, 40, BLACK);
     DrawText("PRESS SPACE to MENU", 250, 200, 20, DARKGREEN);

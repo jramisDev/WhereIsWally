@@ -1,5 +1,3 @@
-#pragma once
-
 //FPS
 #define FPS 60
 
@@ -9,8 +7,6 @@
 #define GAME_TITLE "Where is Wally?"
 
 enum Screens { MENU, GAME, NEXTLEVEL, WIN, GAMEOVER };
-
-Screens actualScreen = MENU;
 
 //Save records files
 const char urlRecordFile[31] = "resources/saveGame/records.txt";
@@ -23,16 +19,6 @@ Texture2D backgroundThree;
 
 //Variables
 bool globalRunning = true;
-
-int level = 1;
-int score = 0;
-bool gameOver = false;
-
-int levelTime = 5; // Duración del nivel en segundos
-
-float elapsedTime = 0.0f; // Tiempo transcurrido en segundos
-float timeAcumulated = 0.0f;
-float totalGame = 0.0f;
 
 //Functions
 Color GetRandomColor();

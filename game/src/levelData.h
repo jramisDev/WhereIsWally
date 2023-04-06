@@ -1,8 +1,6 @@
-#pragma once
-
-#include "raylib.h"
-
 class LevelData {
+
+	Screens screenActual;
 
 	//Level Data
 	int level;
@@ -19,6 +17,8 @@ public:
 
 	LevelData() {
 
+		screenActual = MENU;
+
 		level = 1;
 		levelTime = 10;
 		score = 0;
@@ -31,6 +31,9 @@ public:
 
 	}
 
+	Screens getScreenActual() { return screenActual; }
+	void setScreenActual(Screens pScreen) { screenActual = pScreen; }
+
 	int getLevel() { return level; }
 	void sumLevel() { level++; }
 
@@ -38,7 +41,7 @@ public:
 	void sumLevelTime(int addTime) { levelTime += addTime; }
 
 	int getScore() { return score; }
-	void sumScore() { score++; };
+	void sumScore() { score++; }
 	void resetScore() { score = 0; }
 
 	float getElapsedTime() { return elapsedTime; }

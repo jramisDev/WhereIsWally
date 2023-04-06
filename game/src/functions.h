@@ -1,11 +1,8 @@
-#pragma once
-
-#include "raylib.h"
-#include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 // Devuelve un color aleatorio
 Color GetRandomColor() {
