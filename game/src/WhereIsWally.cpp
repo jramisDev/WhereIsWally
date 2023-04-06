@@ -10,6 +10,7 @@
 #include "Init.h"
 #include "Functions.h"
 #include "LevelData.h"
+#include "Figures.h"
 
 // Generar tres figuras aleatorias
 Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
@@ -34,6 +35,9 @@ bool circUI = false;
 bool triUI = false;
 
 LevelData game;
+Figures rectangle;
+Figures circle;
+Figures triangle;
 
 
 int main() {
@@ -100,10 +104,10 @@ void initApp() {
 void mainScreen() {
 
     game = LevelData();
-    
-    rectUI = false;
-    circUI = false;
-    triUI = false;
+
+    rectangle = Figures();
+    circle = Figures();
+    triangle = Figures();
 
     circleColor = GetRandomColor();
     rectColor = GetRandomColor();
@@ -132,9 +136,9 @@ void gameScreen() {
     DrawRectangle(SCREEN_WIDTH - 300, 0, 300, 100, BLACK);//Right backgroundUI
 
     // Dibujar las tres figuras en la UI
-    if (!circUI)  DrawCircle(550, 50, circleRadius, circleColor);
-    if (!rectUI)  DrawRectangle(600, 25, rectWidth, rectHeight, rectColor);
-    if (!triUI)   DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triColor);
+    if (!circle.getIsFinded())  DrawCircle(550, 50, circleRadius, circleColor);
+    if (!rectangle.getIsFinded())  DrawRectangle(600, 25, rectWidth, rectHeight, rectColor);
+    if (!triangle.getIsFinded())   DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triColor);
 
     // Dibujar las tres figuras generadas aleatoriamente
     DrawCircle(circlePos.x, circlePos.y, circleRadius, circleColor);
@@ -150,14 +154,14 @@ void gameScreen() {
 
             game.sumScore();//score++;
             circlePos = { -100, -100 }; // Eliminar la figura
-            circUI = true;
+            circle.setIsFinded(true);
 
         }
         else if (CheckCollisionPointRec(mousePos, { rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, (float)rectWidth, (float)rectHeight })) {
 
             game.sumScore(); //score++;
             rectPos = { -100, -100 }; // Eliminar la figura
-            rectUI = true;
+            rectangle.setIsFinded(true);
 
         }
         else if (CheckCollisionPointTriangle(mousePos, triP1, triP2, triP3)) {
@@ -167,7 +171,7 @@ void gameScreen() {
             triP1 = { -500, -500 };
             triP2 = { -500, -500 };
             triP3 = { -500, -500 };
-            triUI = true;
+            triangle.setIsFinded(true);
 
         }
     }
@@ -182,9 +186,9 @@ void gameScreen() {
         game.resetScore();
         game.resetElapsedTime();// Reiniciar el tiempo transcurrido
 
-        rectUI = false;
-        circUI = false;
-        triUI = false;
+        rectangle.setIsFinded(false);
+        circle.setIsFinded(false);
+        triangle.setIsFinded(false);
 
         GenerateRandomShapes(circlePos, circleRadius, circleColor,
             rectPos, rectWidth, rectHeight, rectColor,

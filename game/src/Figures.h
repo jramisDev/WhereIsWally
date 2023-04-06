@@ -1,7 +1,5 @@
 #pragma once
 
-#include "raylib.h"
-
 class Figures {
 
 	bool isFinded;
@@ -12,7 +10,7 @@ public:
 		isFinded = false;
 	}
 
-	bool isFinded() { return isFinded; }
+	bool getIsFinded() { return isFinded; }
 	void setIsFinded(bool pFinded) { isFinded = pFinded; }
 
 };
