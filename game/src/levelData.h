@@ -15,14 +15,6 @@ class LevelData {
 
 	bool gameOver = false;
 
-	//Rectangulo
-	//Rectangle rectFigure;
-	//Color backgroundColor;
-
-	//Circulo
-
-	//Triangulo
-
 public:
 
 	LevelData() {
@@ -49,19 +41,18 @@ public:
 	void sumScore() { score++; };
 	void resetScore() { score = 0; }
 
-	float getElapsedTime() { return elapsedTime; };
+	float getElapsedTime() { return elapsedTime; }
 	void addElapsedTime(float pElapsedTime) { elapsedTime += pElapsedTime; }
 	void resetElapsedTime() { elapsedTime = 0.0f; }
 
+	float getTimeAcumulated() { return timeAcumulated; 	}
+	float setTimeAcumulated(float pTime) { return timeAcumulated = pTime; }
+	void resetTimeAcumulated() { timeAcumulated = 0.0f; }
+	
+	float getTotalGame() { return totalGame; }
+	void addTotalGame(float pTime) { totalGame += pTime; }
+
 	bool isGameOver() { return gameOver; }
 	void setGameOver(bool pGameOver) { gameOver = pGameOver; }
-
-
-	//void Draw() {
-
-	//	DrawRectangleRec(rectTime, backgroundColor);
-	//	DrawRectangleRec(rectFigures, backgroundColor);
-
-	//};
 
 };

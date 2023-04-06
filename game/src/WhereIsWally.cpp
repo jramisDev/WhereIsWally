@@ -1,7 +1,7 @@
 /*
     TO-DO:
     Refactirar código
-
+    No cambian los colores
 */
 
 #pragma once 
@@ -102,6 +102,9 @@ void initApp() {
 void mainScreen() {
 
     game = LevelData();
+    //rectangle = Figures();
+    //circle = Figures();
+    //triangle = Figures();
     
     rectUI = false;
     circUI = false;
@@ -130,9 +133,9 @@ void gameScreen() {
     DrawRectangle(SCREEN_WIDTH - 300, 0, 300, 100, BLACK);//Right backgroundUI
 
     // Dibujar las tres figuras en la UI
-    if (!circUI) DrawCircle(550, 50, circleRadius, circleColor);
-    if (!rectUI) DrawRectangle(600, 25, rectWidth, rectHeight, rectColor);
-    if (!triUI)  DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triColor);
+    if (!circUI)     DrawCircle(550, 50, circleRadius, circleColor);
+    if (!rectUI)  DrawRectangle(600, 25, rectWidth, rectHeight, rectColor);
+    if (!triUI)   DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triColor);
 
     // Dibujar las tres figuras generadas aleatoriamente
     DrawCircle(circlePos.x, circlePos.y, circleRadius, circleColor);
@@ -173,7 +176,8 @@ void gameScreen() {
     // Si todas las figuras han sido eliminadas, pasar al siguiente nivel
     if (!game.isGameOver() && game.getScore() == 3) {
 
-        totalGame = totalGame + game.getElapsedTime();
+        //totalGame = totalGame + game.getElapsedTime();
+        game.addTotalGame(game.getElapsedTime());
         timeAcumulated = game.getLevelTime() - game.getElapsedTime();
 
         game.sumLevel();
@@ -183,6 +187,10 @@ void gameScreen() {
         rectUI = false;
         circUI = false;
         triUI = false;
+
+        //rectangle = Figures();
+        //circle = Figures();
+        //triangle = Figures();
 
         GenerateRandomShapes(circlePos, circleRadius, circleColor,
             rectPos, rectWidth, rectHeight, rectColor,
@@ -230,9 +238,9 @@ void winScreen() {
     DrawText("YOU WIN!", 250, 150, 40, GREEN);
     DrawText("PRESS SPACE to EXIT", 250, 195, 20, DARKGREEN);
 
-    DrawText(TextFormat("Duration game: %.0f", totalGame), 10, 10, 20, BLACK);
+    DrawText(TextFormat("Duration game: %.0f", game.getTotalGame()), 10, 10, 20, BLACK);
 
-    saveRecord();
+    saveRecord(game.getTotalGame());
 
     if (IsKeyDown(KEY_SPACE)) actualScreen = MENU;
 
@@ -246,4 +254,3 @@ void endScreen() {
     DrawText("PRESS SPACE to MENU", 250, 200, 20, DARKGREEN);
 
 }
-

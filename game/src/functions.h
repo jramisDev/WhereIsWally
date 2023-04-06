@@ -59,7 +59,7 @@ void loadRecord() {
 
 }
 
-void saveRecord() {
+void saveRecord(int totalGame) {
 
     //Guardamos el tiempo, poniendo un bool para hacerlo sólo una vez en el bucle
     if (!bWriteFile) {
@@ -67,7 +67,7 @@ void saveRecord() {
         std::ofstream MyFile(urlRecordFile, std::ios_base::app);
 
         if (MyFile.is_open()) {
-            MyFile << "\n" << (int)totalGame;
+            MyFile << "\n" << totalGame;
             MyFile.close();
         }
 
