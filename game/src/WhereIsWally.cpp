@@ -178,7 +178,6 @@ int main() {
                 }
 
                 // Mostrar el nivel y la puntuación en la pantalla
-
                 DrawText(TextFormat("Tiempo: %.0f", levelTime - elapsedTime), 10, 10, 20, WHITE);
                 DrawText(TextFormat("elapsedTime: %.0f", elapsedTime), 10, 30, 20, WHITE);
                 DrawText(TextFormat("timeAcumulated: %i", timeAcumulated), 10, 50, 20, WHITE);
@@ -198,7 +197,13 @@ int main() {
 
                 DrawText(TextFormat("timeAcumulated: %.0f", timeAcumulated), 10, 10, 20, BLACK);                
 
-                if (IsKeyDown(KEY_SPACE)) actualScreen = GAME;
+                if (IsKeyDown(KEY_SPACE)) {
+                    actualScreen = GAME;
+                    levelTime = levelTime + timeAcumulated;
+                    timeAcumulated = 0;
+
+                }
+
             }break;
             case WIN: {
 

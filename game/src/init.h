@@ -21,7 +21,7 @@ int level = 1;
 int score = 0;
 bool gameOver = false;
 
-int levelTime = 100; // Duración del nivel en segundos
+int levelTime = 20; // Duración del nivel en segundos
 
 bool bWriteFile = false;
 
