@@ -1,8 +1,5 @@
 /*
     TO-DO:
-
-    Añadir cuadro de color sobre el texto de arriba a la izquierda para que se vea bien el tiempo
-    Figuras arriba a la derecha, sobre un fondo de color para que se vean, se eliminan los iconos al pulsar sobre la figura.
     Bug tiempo acumulado al pasar de pantalla
     Refactirar código
 
@@ -13,14 +10,14 @@
 #pragma warning(disable : 4244)
 
 #include "raylib.h"
-#include "init.h"
-#include "functions.h"
-#include "levelData.h"
+#include "Init.h"
+#include "Functions.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <algorithm>
+
 
 int main() {
 
@@ -38,21 +35,26 @@ int main() {
     float totalGame = 0.0f;
 
     // Generar tres figuras aleatorias
-    Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 100) };
-    Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 100) };
-    Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(50, SCREEN_HEIGHT - 100) };
+    Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
+    Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
+    Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
 
     Color circleColor = GetRandomColor();
     Color rectColor = GetRandomColor();
     Color triColor = GetRandomColor();
 
-    int circleRadius = GetRandomValue(10,50);
-    int rectWidth = GetRandomShape() * 20 + 20;
-    int rectHeight = GetRandomShape() * 20 + 20;
+    int circleRadius = 25;
+    int rectWidth = 100;
+    int rectHeight = 50;
+
     Vector2 triP1 = { triPos.x - 25, triPos.y + 25 };
     Vector2 triP2 = { triPos.x + 25, triPos.y + 25 };
     Vector2 triP3 = { triPos.x, triPos.y - 25 };
     // Cada figura debe tener una posición aleatoria en la pantalla y una forma aleatoria
+
+    bool rectUI = false;
+    bool circUI = false;
+    bool triUI = false;
 
 
     while (globalRunning) {
@@ -63,9 +65,6 @@ int main() {
 
         ClearBackground(RAYWHITE);
 
-        //std::cout << "\nPantalla actual: " << actualScreen;
-        std::cout << "\nGameOver: " << gameOver;
-
         switch (actualScreen) {
             case MENU: {
 
@@ -73,6 +72,9 @@ int main() {
                 score = 0;
                 elapsedTime = 0.0f;
                 gameOver = false;
+                rectUI = false;
+                circUI = false;
+                triUI = false;
 
                 DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, RAYWHITE);
                 DrawText(GAME_TITLE, 250, 100, 40, RED);
@@ -108,6 +110,15 @@ int main() {
 
                 DrawTexture(background, 0, 0, WHITE);
 
+
+                DrawRectangle(0, 0, 200, 100, { 0,0,0,122 });//Left backbroundUI
+                DrawRectangle(SCREEN_WIDTH - 300, 0, 300, 100, { 0,0,0,122 });//Right backgroundUI
+
+                // Dibujar las tres figuras en la UI
+                if (!circUI) DrawCircle(550, 50, circleRadius, circleColor);
+                if (!rectUI)  DrawRectangle(600, 25, rectWidth, rectHeight, rectColor);
+                if (!triUI) DrawTriangle({750,25}, {725,75}, {775,75}, triColor);
+
                 // Dibujar las tres figuras generadas aleatoriamente
                 DrawCircle(circlePos.x, circlePos.y, circleRadius, circleColor);
                 DrawRectangle(rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, rectWidth, rectHeight, rectColor);
@@ -122,11 +133,13 @@ int main() {
 
                         score++;
                         circlePos = { -100, -100 }; // Eliminar la figura
+                        circUI = true;
 
                     } else if (CheckCollisionPointRec(mousePos, { rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, (float)rectWidth, (float)rectHeight })) {
 
                         score++;
                         rectPos = { -100, -100 }; // Eliminar la figura
+                        rectUI = true;
 
                     } else if (CheckCollisionPointTriangle(mousePos, triP1, triP2, triP3)) {
 
@@ -135,6 +148,7 @@ int main() {
                         triP1 = { -500, -500 };
                         triP2 = { -500, -500 };
                         triP3 = { -500, -500 };
+                        triUI = true;
 
                     }
                 }
@@ -146,6 +160,9 @@ int main() {
                     level++;
                     score = 0;
                     elapsedTime = 0.0f; // Reiniciar el tiempo transcurrido
+                    rectUI = false;
+                    circUI = false;
+                    triUI = false;
 
                     GenerateRandomShapes(circlePos, circleRadius, circleColor,
                         rectPos, rectWidth, rectHeight, rectColor,
@@ -161,10 +178,10 @@ int main() {
                 }
 
                 // Mostrar el nivel y la puntuación en la pantalla
-                DrawText(TextFormat("Nivel: %i", level), 10, 10, 20, BLACK);
-                DrawText(TextFormat("Tiempo: %.0f", levelTime - elapsedTime), 10, 30, 20, BLACK);
-                DrawText(TextFormat("elapsedTime: %.0f", elapsedTime), 10, 50, 20, BLACK);
-                DrawText(TextFormat("timeAcumulated: %i", timeAcumulated), 10, 70, 20, BLACK);
+
+                DrawText(TextFormat("Tiempo: %.0f", levelTime - elapsedTime), 10, 10, 20, WHITE);
+                DrawText(TextFormat("elapsedTime: %.0f", elapsedTime), 10, 30, 20, WHITE);
+                DrawText(TextFormat("timeAcumulated: %i", timeAcumulated), 10, 50, 20, WHITE);
 
                 // Actualizar el tiempo transcurrido
                 elapsedTime += GetFrameTime();
@@ -179,7 +196,7 @@ int main() {
                 DrawText("YOU WIN! Loading next level", 150, 150, 40, GREEN);
                 DrawText("PRESS SPACE to MENU", 250, 195, 20, DARKGREEN);
 
-                DrawText(TextFormat("timeAcumulated: %.0f", timeAcumulated), 10, 70, 20, BLACK);                
+                DrawText(TextFormat("timeAcumulated: %.0f", timeAcumulated), 10, 10, 20, BLACK);                
 
                 if (IsKeyDown(KEY_SPACE)) actualScreen = GAME;
             }break;

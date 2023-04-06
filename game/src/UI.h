@@ -2,16 +2,15 @@
 
 #include "raylib.h"
 
-class LevelData {
+class UI {
 
 	Rectangle rectTime;
 	Rectangle rectFigures;
 	Color backgroundColor;
 
-
 public:
 
-	LevelData() {
+	UI(){
 
 		Rectangle r;
 		r.x = 0;
@@ -26,13 +25,13 @@ public:
 		r.height = 100;
 		rectFigures = r;
 
-		backgroundColor = {0,0,0,122};//Negro un poco transparente
+		backgroundColor = BLACK;
 
 		//DrawRectangle(0, 0, 200, 100, BLACK);
 		//DrawRectangle(SCREEN_WIDTH - 200, 0, 200, 100, BLACK);
 	}
 
-
+	
 	//UI(Color pNormal, Color pHover, int pDescLength, char* pDesc, float posX, float posY, float pWidth, float pHeight) {
 	//	backgroundColor = pNormal;
 
@@ -44,13 +43,8 @@ public:
 	//	rect = r;
 	//}
 
-	void Draw() {
+	
 
-
-
-		DrawRectangleRec(rectTime, backgroundColor);
-		DrawRectangleRec(rectFigures, backgroundColor);
-
-	};
+private:
 
 };
