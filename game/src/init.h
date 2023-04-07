@@ -44,3 +44,5 @@ void endScreen();
 void saveRecord();
 
 void loadRecord();
+
+void drawRecord(int recordIndex, int record, int height);

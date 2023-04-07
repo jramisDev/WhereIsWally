@@ -19,9 +19,9 @@ int GetRandomShape() {
     return GetRandomValue(1, 5);
 }
 
-void GenerateRandomShapes(Vector2& circlePos, int& circleRadius, Color& circleColor,
-    Vector2& rectPos, int& rectWidth, int& rectHeight, Color& rectColor,
-    Vector2& triPos, Vector2& triP1, Vector2& triP2, Vector2& triP3, Color& triColor) {
+void GenerateRandomShapes(Vector2& circlePos, int& circleRadius,
+    Vector2& rectPos, int& rectWidth, int& rectHeight,
+    Vector2& triPos, Vector2& triP1, Vector2& triP2, Vector2& triP3) {
 
     circlePos = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(50, SCREEN_HEIGHT - 50) };
 
@@ -50,7 +50,7 @@ void loadRecord() {
 
     int j = 0;
     for (int i = 0; i < 3 && i < numeros.size(); i++) {
-        DrawText(std::to_string(numeros[i]).c_str(), 275, 250 + j, 15, DARKGREEN);
+        drawRecord(i, numeros[i], j);
         j += 20;
     }
 
@@ -70,5 +70,19 @@ void saveRecord(int totalGame) {
 
         bWriteFile = true;
     }
+
+}
+
+void drawRecord(int recordIndex, int record, int height) {
+
+    std::string position = "First: ";
+
+    if (recordIndex == 1) {
+        position = "Second: ";
+    } else if(recordIndex == 2){
+        position = "Third: ";
+    }
+
+    DrawText(position.append(std::to_string(record)).c_str(), 275, 250 + height, 15, DARKGREEN);
 
 }

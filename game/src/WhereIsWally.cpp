@@ -11,15 +11,14 @@
 #include "Functions.h"
 #include "LevelData.h"
 #include "Figures.h"
+#include "CircleJRG.h"
+#include "TriangleJRG.h"
+#include "RectangleJRG.h"
 
 // Generar tres figuras aleatorias
 Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
 Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
 Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
-
-Color circleColor;
-Color rectColor;
-Color triColor;
 
 int circleRadius = 25;
 int rectWidth = 100;
@@ -30,9 +29,6 @@ Vector2 triP2 = { triPos.x + 25, triPos.y + 25 };
 Vector2 triP3 = { triPos.x, triPos.y - 25 };
 // Cada figura debe tener una posición aleatoria en la pantalla y una forma aleatoria
 
-bool rectUI = false;
-bool circUI = false;
-bool triUI = false;
 
 LevelData game;
 Figures rectangle;
@@ -41,6 +37,7 @@ Figures triangle;
 
 
 int main() {
+
 
     initApp();
 
@@ -109,10 +106,6 @@ void mainScreen() {
     circle = Figures();
     triangle = Figures();
 
-    circleColor = GetRandomColor();
-    rectColor = GetRandomColor();
-    triColor = GetRandomColor();
-
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, RAYWHITE);
     DrawText(GAME_TITLE, 250, 100, 40, RED);
     DrawText("PRESS ENTER to GAME", 275, 140, 20, DARKBLUE);
@@ -136,14 +129,14 @@ void gameScreen() {
     DrawRectangle(SCREEN_WIDTH - 300, 0, 300, 100, BLACK);//Right backgroundUI
 
     // Dibujar las tres figuras en la UI
-    if (!circle.getIsFinded())  DrawCircle(550, 50, circleRadius, circleColor);
-    if (!rectangle.getIsFinded())  DrawRectangle(600, 25, rectWidth, rectHeight, rectColor);
-    if (!triangle.getIsFinded())   DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triColor);
+    if (!circle.getIsFinded())  DrawCircle(550, 50, circleRadius, circle.getColor());
+    if (!rectangle.getIsFinded())  DrawRectangle(600, 25, rectWidth, rectHeight, rectangle.getColor());
+    if (!triangle.getIsFinded())   DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triangle.getColor());
 
     // Dibujar las tres figuras generadas aleatoriamente
-    DrawCircle(circlePos.x, circlePos.y, circleRadius, circleColor);
-    DrawRectangle(rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, rectWidth, rectHeight, rectColor);
-    DrawTriangle(triP1, triP2, triP3, triColor);
+    DrawCircle(circlePos.x, circlePos.y, circleRadius, circle.getColor());
+    DrawRectangle(rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, rectWidth, rectHeight, rectangle.getColor());
+    DrawTriangle(triP1, triP2, triP3, triangle.getColor());
 
     // Si el usuario hace clic en una figura, aumentar la puntuación y eliminar la figura
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -190,9 +183,9 @@ void gameScreen() {
         circle.setIsFinded(false);
         triangle.setIsFinded(false);
 
-        GenerateRandomShapes(circlePos, circleRadius, circleColor,
-            rectPos, rectWidth, rectHeight, rectColor,
-            triPos, triP1, triP2, triP3, triColor);
+        GenerateRandomShapes(circlePos, circleRadius,
+            rectPos, rectWidth, rectHeight,
+            triPos, triP1, triP2, triP3);
 
         if (game.getLevel() == 2) background = backgroundTwo;
         if (game.getLevel() == 3) background = backgroundThree;
