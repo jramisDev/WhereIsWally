@@ -10,16 +10,6 @@
 #include "RectangleJRG.h"
 #include "Functions.h"
 
-// Generar tres figuras aleatorias
-//Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
-//Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
-
-//Vector2 triP1 = { triPos.x - 25, triPos.y + 25 };
-//Vector2 triP2 = { triPos.x + 25, triPos.y + 25 };
-//Vector2 triP3 = { triPos.x, triPos.y - 25 };
-// Cada figura debe tener una posición aleatoria en la pantalla y una forma aleatoria
-
-
 LevelData game;
 
 RectangleJRG rectangle;
@@ -169,9 +159,9 @@ void gameScreen() {
         game.resetScore();
         game.resetElapsedTime();// Reiniciar el tiempo transcurrido
 
-        rectangle = RectangleJRG();
-        circle = CircleJRG();
-        triangle = TriangleJRG();
+        rectangle = RectangleJRG(rectangle.getColor());
+        circle = CircleJRG(circle.getColor());
+        triangle = TriangleJRG(triangle.getColor());
 
         if (game.getLevel() == 2) background = backgroundTwo;
         if (game.getLevel() == 3) background = backgroundThree;

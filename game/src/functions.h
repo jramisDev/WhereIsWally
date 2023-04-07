@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <iostream>
 
-
 // Devuelve un color aleatorio
 Color GetRandomColor() {
 

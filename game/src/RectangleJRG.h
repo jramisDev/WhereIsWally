@@ -1,7 +1,3 @@
-#pragma once
-
-#include "raylib.h"
-
 class RectangleJRG :public Figures{
 
 	int width;
@@ -13,6 +9,12 @@ public:
 		width = 100;
 		height = 50;
 		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(100, SCREEN_HEIGHT - 200) };
+	}
+	RectangleJRG(Color pColor) {
+		width = 100;
+		height = 50;
+		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(100, SCREEN_HEIGHT - 200) };
+		setColor(pColor);
 	}
 
 	int getWidth() { return width; }

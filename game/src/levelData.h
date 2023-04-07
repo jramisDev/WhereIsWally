@@ -2,7 +2,6 @@ class LevelData {
 
 	Screens screenActual;
 
-	//Level Data
 	int level;
 	int score;
 	int levelTime;

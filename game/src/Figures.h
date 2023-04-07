@@ -1,5 +1,3 @@
-#pragma once
-
 class Figures {
 
 	bool isFinded;
@@ -15,6 +13,7 @@ public:
 	bool getIsFinded() { return isFinded; }
 	void setIsFinded(bool pFinded) { isFinded = pFinded; }
 
-	Color getColor() { return color; };
+	Color getColor() { return color; }
+	void setColor(Color pColor) { color = pColor; };
 
 };

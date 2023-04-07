@@ -1,7 +1,3 @@
-#pragma once
-
-#include "raylib.h"
-
 class TriangleJRG :public Figures {
 
 	Vector2 position;
@@ -16,6 +12,13 @@ public:
 		triP1 = { position.x - 25, position.y + 25 };
 		triP2 = { position.x + 25, position.y + 25 };
 		triP3 = { position.x, position.y - 25 };
+	}
+	TriangleJRG(Color pColor) {
+		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(100, SCREEN_HEIGHT - 200) };
+		triP1 = { position.x - 25, position.y + 25 };
+		triP2 = { position.x + 25, position.y + 25 };
+		triP3 = { position.x, position.y - 25 };
+		setColor(pColor);
 	}
 
 	Vector2 getPosition() { return position; }
