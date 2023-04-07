@@ -129,15 +129,13 @@ void gameScreen() {
             circle.setPosition({ -100, -100 });
             circle.setIsFinded(true);
 
-        }
-        else if (CheckCollisionPointRec(mousePos, { rectangle.getPosition().x - rectangle.getWidth() / 2, rectangle.getPosition().y - rectangle.getHeight() / 2, (float)rectangle.getWidth(), (float)rectangle.getHeight() })) {
+        } else if (CheckCollisionPointRec(mousePos, { rectangle.getPosition().x - rectangle.getWidth() / 2, rectangle.getPosition().y - rectangle.getHeight() / 2, (float)rectangle.getWidth(), (float)rectangle.getHeight() })) {
 
             game.sumScore();
             rectangle.setPosition({ -100, -100 });
             rectangle.setIsFinded(true);
 
-        }
-        else if (CheckCollisionPointTriangle(mousePos, triangle.getTriP1(), triangle.getTriP2(), triangle.getTriP3())) {
+        } else if (CheckCollisionPointTriangle(mousePos, triangle.getTriP1(), triangle.getTriP2(), triangle.getTriP3())) {
 
             game.sumScore();
             triangle.setPosition({ -100, -100 });
