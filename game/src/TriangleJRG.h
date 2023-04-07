@@ -2,7 +2,7 @@
 
 #include "raylib.h"
 
-class TriangleJRG:Figures {
+class TriangleJRG :public Figures {
 
 
 

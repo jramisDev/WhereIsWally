@@ -2,7 +2,7 @@
 
 #include "raylib.h"
 
-class RectangleJRG:Figures{
+class RectangleJRG :public Figures{
 
 	int width;
 	int height;

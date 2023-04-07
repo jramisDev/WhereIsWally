@@ -2,7 +2,7 @@
 
 #include "raylib.h"
 
-class CircleJRG:Figures {
+class CircleJRG :public Figures {
 
 	int radius;
 

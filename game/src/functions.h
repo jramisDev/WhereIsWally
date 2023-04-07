@@ -19,8 +19,8 @@ int GetRandomShape() {
     return GetRandomValue(1, 5);
 }
 
-void GenerateRandomShapes(Vector2& circlePos, int& circleRadius,
-    Vector2& rectPos, int& rectWidth, int& rectHeight,
+void GenerateRandomShapes(Vector2& circlePos,
+    Vector2& rectPos,
     Vector2& triPos, Vector2& triP1, Vector2& triP2, Vector2& triP3) {
 
     circlePos = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(50, SCREEN_HEIGHT - 50) };
@@ -46,7 +46,7 @@ void loadRecord() {
     MyFile.close();
 
     // Ordenar el vector en orden descendente
-    std::sort(numeros.begin(), numeros.end(), std::greater<int>());
+    std::sort(numeros.begin(), numeros.end(), std::less<int>());
 
     int j = 0;
     for (int i = 0; i < 3 && i < numeros.size(); i++) {
@@ -83,6 +83,6 @@ void drawRecord(int recordIndex, int record, int height) {
         position = "Third: ";
     }
 
-    DrawText(position.append(std::to_string(record)).c_str(), 275, 250 + height, 15, DARKGREEN);
+    DrawText(position.append(std::to_string(record)).append(" s").c_str(), 275, 250 + height, 15, DARKGREEN);
 
 }

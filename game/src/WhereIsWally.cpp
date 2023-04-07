@@ -20,10 +20,6 @@ Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100,
 Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
 Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
 
-int circleRadius = 25;
-int rectWidth = 100;
-int rectHeight = 50;
-
 Vector2 triP1 = { triPos.x - 25, triPos.y + 25 };
 Vector2 triP2 = { triPos.x + 25, triPos.y + 25 };
 Vector2 triP3 = { triPos.x, triPos.y - 25 };
@@ -31,13 +27,13 @@ Vector2 triP3 = { triPos.x, triPos.y - 25 };
 
 
 LevelData game;
-Figures rectangle;
-Figures circle;
+
+RectangleJRG rectangle;
+CircleJRG circle;
 Figures triangle;
 
 
 int main() {
-
 
     initApp();
 
@@ -102,8 +98,8 @@ void mainScreen() {
 
     game = LevelData();
 
-    rectangle = Figures();
-    circle = Figures();
+    rectangle = RectangleJRG();
+    circle = CircleJRG();
     triangle = Figures();
 
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, RAYWHITE);
@@ -129,13 +125,13 @@ void gameScreen() {
     DrawRectangle(SCREEN_WIDTH - 300, 0, 300, 100, BLACK);//Right backgroundUI
 
     // Dibujar las tres figuras en la UI
-    if (!circle.getIsFinded())  DrawCircle(550, 50, circleRadius, circle.getColor());
-    if (!rectangle.getIsFinded())  DrawRectangle(600, 25, rectWidth, rectHeight, rectangle.getColor());
+    if (!circle.getIsFinded())  DrawCircle(550, 50, circle.getRadius(), circle.getColor());
+    if (!rectangle.getIsFinded())  DrawRectangle(600, 25, rectangle.getWidth(), rectangle.getHeight(), rectangle.getColor());
     if (!triangle.getIsFinded())   DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triangle.getColor());
 
     // Dibujar las tres figuras generadas aleatoriamente
-    DrawCircle(circlePos.x, circlePos.y, circleRadius, circle.getColor());
-    DrawRectangle(rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, rectWidth, rectHeight, rectangle.getColor());
+    DrawCircle(circlePos.x, circlePos.y, circle.getRadius(), circle.getColor());
+    DrawRectangle(rectPos.x - rectangle.getWidth() / 2, rectPos.y - rectangle.getHeight() / 2, rectangle.getWidth(), rectangle.getHeight(), rectangle.getColor());
     DrawTriangle(triP1, triP2, triP3, triangle.getColor());
 
     // Si el usuario hace clic en una figura, aumentar la puntuación y eliminar la figura
@@ -143,14 +139,14 @@ void gameScreen() {
 
         Vector2 mousePos = GetMousePosition();
 
-        if (CheckCollisionPointCircle(mousePos, circlePos, circleRadius)) {
+        if (CheckCollisionPointCircle(mousePos, circlePos, circle.getRadius())) {
 
             game.sumScore();//score++;
             circlePos = { -100, -100 }; // Eliminar la figura
             circle.setIsFinded(true);
 
         }
-        else if (CheckCollisionPointRec(mousePos, { rectPos.x - rectWidth / 2, rectPos.y - rectHeight / 2, (float)rectWidth, (float)rectHeight })) {
+        else if (CheckCollisionPointRec(mousePos, { rectPos.x - rectangle.getWidth() / 2, rectPos.y - rectangle.getHeight() / 2, (float)rectangle.getWidth(), (float)rectangle.getHeight() })) {
 
             game.sumScore(); //score++;
             rectPos = { -100, -100 }; // Eliminar la figura
@@ -183,9 +179,7 @@ void gameScreen() {
         circle.setIsFinded(false);
         triangle.setIsFinded(false);
 
-        GenerateRandomShapes(circlePos, circleRadius,
-            rectPos, rectWidth, rectHeight,
-            triPos, triP1, triP2, triP3);
+        GenerateRandomShapes(circlePos, rectPos, triPos, triP1, triP2, triP3);
 
         if (game.getLevel() == 2) background = backgroundTwo;
         if (game.getLevel() == 3) background = backgroundThree;
