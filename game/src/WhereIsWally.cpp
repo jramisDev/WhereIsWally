@@ -104,7 +104,7 @@ void mainScreen() {
 
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, RAYWHITE);
     DrawText(GAME_TITLE, 250, 100, 40, RED);
-    DrawText("PRESS ENTER to GAME", 275, 140, 20, DARKBLUE);
+    DrawText("PRESS SPACE to GAME", 275, 140, 20, DARKBLUE);
 
     DrawText("CONTROLS:", 275, 180, 20, BLACK);
     DrawText("LEFT CLICK mouse button to CONFIRM object", 275, 200, 15, BLACK);
@@ -113,7 +113,7 @@ void mainScreen() {
 
     loadRecord();
 
-    if (IsKeyDown(KEY_ENTER)) game.setScreenActual(GAME);
+    if (IsKeyDown(KEY_SPACE)) game.setScreenActual(GAME);
 
 }
 
@@ -206,7 +206,7 @@ void nextScreen() {
     DrawText("YOU WIN! Loading next level", 150, 150, 40, GREEN);
     DrawText("PRESS SPACE to MENU", 250, 195, 20, DARKGREEN);
 
-    DrawText(TextFormat("timeAcumulated: %.0f", game.getTimeAcumulated()), 10, 10, 20, BLACK);
+    //DrawText(TextFormat("Time acumulated: %.0f", game.getTimeAcumulated()), 10, 10, 20, BLACK);
 
     if (IsKeyDown(KEY_SPACE)) {
         game.setScreenActual(GAME);
