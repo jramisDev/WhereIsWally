@@ -1,28 +1,22 @@
-/*
-    TO-DO:
-    Refactirar código figuras
-*/
-
 #pragma warning(disable : 4838)//Quito warnings de cast que me molestan
 #pragma warning(disable : 4244)
 
 #include "raylib.h"
 #include "Init.h"
-#include "Functions.h"
 #include "LevelData.h"
 #include "Figures.h"
 #include "CircleJRG.h"
 #include "TriangleJRG.h"
 #include "RectangleJRG.h"
+#include "Functions.h"
 
 // Generar tres figuras aleatorias
-Vector2 circlePos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
-Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
-Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
+//Vector2 rectPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
+//Vector2 triPos = { GetRandomValue(50, SCREEN_WIDTH - 50), GetRandomValue(100, SCREEN_HEIGHT - 200) };
 
-Vector2 triP1 = { triPos.x - 25, triPos.y + 25 };
-Vector2 triP2 = { triPos.x + 25, triPos.y + 25 };
-Vector2 triP3 = { triPos.x, triPos.y - 25 };
+//Vector2 triP1 = { triPos.x - 25, triPos.y + 25 };
+//Vector2 triP2 = { triPos.x + 25, triPos.y + 25 };
+//Vector2 triP3 = { triPos.x, triPos.y - 25 };
 // Cada figura debe tener una posición aleatoria en la pantalla y una forma aleatoria
 
 
@@ -30,7 +24,7 @@ LevelData game;
 
 RectangleJRG rectangle;
 CircleJRG circle;
-Figures triangle;
+TriangleJRG triangle;
 
 
 int main() {
@@ -100,11 +94,11 @@ void mainScreen() {
 
     rectangle = RectangleJRG();
     circle = CircleJRG();
-    triangle = Figures();
+    triangle = TriangleJRG();
 
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, RAYWHITE);
     DrawText(GAME_TITLE, 250, 100, 40, RED);
-    DrawText("PRESS SPACE to GAME", 275, 140, 20, DARKBLUE);
+    DrawText("PRESS ENTER to GAME", 275, 140, 20, DARKBLUE);
 
     DrawText("CONTROLS:", 275, 180, 20, BLACK);
     DrawText("LEFT CLICK mouse button to CONFIRM object", 275, 200, 15, BLACK);
@@ -113,7 +107,7 @@ void mainScreen() {
 
     loadRecord();
 
-    if (IsKeyDown(KEY_SPACE)) game.setScreenActual(GAME);
+    if (IsKeyDown(KEY_ENTER)) game.setScreenActual(GAME);
 
 }
 
@@ -130,36 +124,36 @@ void gameScreen() {
     if (!triangle.getIsFinded())   DrawTriangle({ 750,25 }, { 725,75 }, { 775,75 }, triangle.getColor());
 
     // Dibujar las tres figuras generadas aleatoriamente
-    DrawCircle(circlePos.x, circlePos.y, circle.getRadius(), circle.getColor());
-    DrawRectangle(rectPos.x - rectangle.getWidth() / 2, rectPos.y - rectangle.getHeight() / 2, rectangle.getWidth(), rectangle.getHeight(), rectangle.getColor());
-    DrawTriangle(triP1, triP2, triP3, triangle.getColor());
+    DrawCircle(circle.getPosition().x, circle.getPosition().y, circle.getRadius(), circle.getColor());
+    DrawRectangle(rectangle.getPosition().x - rectangle.getWidth() / 2, rectangle.getPosition().y - rectangle.getHeight() / 2, rectangle.getWidth(), rectangle.getHeight(), rectangle.getColor());
+    DrawTriangle(triangle.getTriP1(), triangle.getTriP2(), triangle.getTriP3(), triangle.getColor());
 
     // Si el usuario hace clic en una figura, aumentar la puntuación y eliminar la figura
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
 
         Vector2 mousePos = GetMousePosition();
 
-        if (CheckCollisionPointCircle(mousePos, circlePos, circle.getRadius())) {
+        if (CheckCollisionPointCircle(mousePos, circle.getPosition(), circle.getRadius())) {
 
-            game.sumScore();//score++;
-            circlePos = { -100, -100 }; // Eliminar la figura
+            game.sumScore();
+            circle.setPosition({ -100, -100 });
             circle.setIsFinded(true);
 
         }
-        else if (CheckCollisionPointRec(mousePos, { rectPos.x - rectangle.getWidth() / 2, rectPos.y - rectangle.getHeight() / 2, (float)rectangle.getWidth(), (float)rectangle.getHeight() })) {
+        else if (CheckCollisionPointRec(mousePos, { rectangle.getPosition().x - rectangle.getWidth() / 2, rectangle.getPosition().y - rectangle.getHeight() / 2, (float)rectangle.getWidth(), (float)rectangle.getHeight() })) {
 
-            game.sumScore(); //score++;
-            rectPos = { -100, -100 }; // Eliminar la figura
+            game.sumScore();
+            rectangle.setPosition({ -100, -100 });
             rectangle.setIsFinded(true);
 
         }
-        else if (CheckCollisionPointTriangle(mousePos, triP1, triP2, triP3)) {
+        else if (CheckCollisionPointTriangle(mousePos, triangle.getTriP1(), triangle.getTriP2(), triangle.getTriP3())) {
 
-            game.sumScore();// score++;
-            triPos = { -100, -100 }; // Eliminar la figura
-            triP1 = { -500, -500 };
-            triP2 = { -500, -500 };
-            triP3 = { -500, -500 };
+            game.sumScore();
+            triangle.setPosition({ -100, -100 });
+            triangle.setTriP1({ -500, -500 });
+            triangle.setTriP2({ -500, -500 });
+            triangle.setTrip3({ -500, -500 });
             triangle.setIsFinded(true);
 
         }
@@ -175,11 +169,9 @@ void gameScreen() {
         game.resetScore();
         game.resetElapsedTime();// Reiniciar el tiempo transcurrido
 
-        rectangle.setIsFinded(false);
-        circle.setIsFinded(false);
-        triangle.setIsFinded(false);
-
-        GenerateRandomShapes(circlePos, rectPos, triPos, triP1, triP2, triP3);
+        rectangle = RectangleJRG();
+        circle = CircleJRG();
+        triangle = TriangleJRG();
 
         if (game.getLevel() == 2) background = backgroundTwo;
         if (game.getLevel() == 3) background = backgroundThree;

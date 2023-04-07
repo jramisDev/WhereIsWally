@@ -25,10 +25,6 @@ Color GetRandomColor();
 
 int GetRandomShape();
 
-void GenerateRandomShapes(Vector2& circlePos, int& circleRadius, Color& circleColor,
-    Vector2& rectPos, int& rectWidth, int& rectHeight, Color& rectColor,
-    Vector2& triPos, Vector2& triP1, Vector2& triP2, Vector2& triP3, Color& triColor);
-
 void initApp();
 
 void mainScreen();

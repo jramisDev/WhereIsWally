@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 
+
 // Devuelve un color aleatorio
 Color GetRandomColor() {
 
@@ -17,20 +18,6 @@ Color GetRandomColor() {
 // Devuelve un número aleatorio entre 1 y 5
 int GetRandomShape() {
     return GetRandomValue(1, 5);
-}
-
-void GenerateRandomShapes(Vector2& circlePos,
-    Vector2& rectPos,
-    Vector2& triPos, Vector2& triP1, Vector2& triP2, Vector2& triP3) {
-
-    circlePos = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(50, SCREEN_HEIGHT - 50) };
-
-    rectPos = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(50, SCREEN_HEIGHT - 50) };
-
-    triPos = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(50, SCREEN_HEIGHT - 50) };
-    triP1 = { triPos.x - 25, triPos.y + 25 };
-    triP2 = { triPos.x + 25, triPos.y + 25 };
-    triP3 = { triPos.x, triPos.y - 25 };
 }
 
 void loadRecord() {
