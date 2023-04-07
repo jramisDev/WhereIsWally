@@ -6,11 +6,11 @@ class CircleJRG :public Figures {
 public:
 	CircleJRG() {
 		radius = 25;
-		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(100, SCREEN_HEIGHT - 200) };
+		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(200, SCREEN_HEIGHT - 50) };
 	}
 	CircleJRG(Color pColor) {
 		radius = 25;
-		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(100, SCREEN_HEIGHT - 200) };
+		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(200, SCREEN_HEIGHT - 50) };
 		setColor(pColor);
 	}
 

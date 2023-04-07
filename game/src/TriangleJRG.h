@@ -8,13 +8,13 @@ class TriangleJRG :public Figures {
 
 public:
 	TriangleJRG() {
-		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(100, SCREEN_HEIGHT - 200) };
+		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(200, SCREEN_HEIGHT - 50) };
 		triP1 = { position.x - 25, position.y + 25 };
 		triP2 = { position.x + 25, position.y + 25 };
 		triP3 = { position.x, position.y - 25 };
 	}
 	TriangleJRG(Color pColor) {
-		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(100, SCREEN_HEIGHT - 200) };
+		position = { (float)GetRandomValue(50, SCREEN_WIDTH - 50), (float)GetRandomValue(200, SCREEN_HEIGHT - 50) };
 		triP1 = { position.x - 25, position.y + 25 };
 		triP2 = { position.x + 25, position.y + 25 };
 		triP3 = { position.x, position.y - 25 };
